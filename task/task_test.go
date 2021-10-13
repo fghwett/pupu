@@ -12,7 +12,7 @@ var conf *config.Conf
 
 func init() {
 	var err error
-	conf, err = config.Init("../config.yml")
+	conf, err = config.New("../config.yml")
 	if err != nil {
 		log.Println("read config err: ", err)
 		return
@@ -20,7 +20,7 @@ func init() {
 }
 
 func TestNew(t *testing.T) {
-	task := New(conf.Config)
+	task := New(conf)
 	task.Do()
 	fmt.Println(task.GetResult())
 }
