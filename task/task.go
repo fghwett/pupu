@@ -58,7 +58,7 @@ func (t *Task) Do() {
 }
 
 func (t *Task) getToken() error {
-	if time.Now().UnixNano()/1e6 < t.config.ExpiredAt {
+	if time.Now().Unix() < t.config.ExpiredAt {
 		t.result = append(t.result, fmt.Sprintf("【刷新登陆状态】：已经是最新了"))
 		return nil
 	}
