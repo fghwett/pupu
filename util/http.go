@@ -12,7 +12,7 @@ func GetHTTPResponse(resp *http.Response, url string, err error, result interfac
 	body, err := GetHTTPResponseOrg(resp, url, err)
 
 	if err == nil {
-		log.Println(string(body))
+		log.Println(url, " ", string(body))
 		err = json.Unmarshal(body, &result)
 
 		if err != nil {
