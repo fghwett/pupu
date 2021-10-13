@@ -3,11 +3,12 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
+	"os"
+
 	"github.com/fghwett/pupu/config"
 	"github.com/fghwett/pupu/notify"
 	"github.com/fghwett/pupu/task"
-	"log"
-	"os"
 )
 
 var path = flag.String("path", "./config.yml", "配置文件地址")

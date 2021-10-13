@@ -35,15 +35,21 @@ func (t *Task) Do() {
 		return
 	}
 
+	util.SmallSleep(300, 800)
+
 	if err := t.signTask(); err != nil {
 		t.result = append(t.result, fmt.Sprintf("【签到任务】：失败 %s", err))
 		return
 	}
 
+	util.SmallSleep(1000, 3000)
+
 	if err := t.shareTask(); err != nil {
 		t.result = append(t.result, fmt.Sprintf("【分享任务】：失败 %s", err))
 		return
 	}
+
+	util.SmallSleep(800, 2000)
 
 	if err := t.queryPointTask(); err != nil {
 		t.result = append(t.result, fmt.Sprintf("【查询积分任务】：失败 %s", err))
