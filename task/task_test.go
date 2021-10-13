@@ -8,11 +8,11 @@ import (
 	"github.com/fghwett/pupu/config"
 )
 
-var conf *config.Conf
+var con *config.Conf
 
 func init() {
 	var err error
-	conf, err = config.New("../config.yml")
+	con, err = config.New("../config.yml")
 	if err != nil {
 		log.Println("read config err: ", err)
 		return
@@ -20,7 +20,7 @@ func init() {
 }
 
 func TestNew(t *testing.T) {
-	task := New(conf)
+	task := New(con)
 	task.Do()
 	fmt.Println(task.GetResult())
 }
