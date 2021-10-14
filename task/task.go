@@ -76,11 +76,8 @@ func (t *Task) getToken() error {
 		return err
 	}
 
-	req.Header.Set("User-Agent", "Pupumall/2.7.0;iOS 15.0;245D5D8A-3860-490A-BD61-9B3E10221D4E")
 	req.Header.Set("content-type", "application/json; charset=utf-8")
-	req.Header.Add("pp-userid", "a32193f0-de63-4182-a1d3-8919cb92fc6f")
-	req.Header.Add("pp-os", "20")
-	req.Header.Add("pp-storeid", "fa701852-eb6e-405e-9321-aa2a12d0fb09")
+	t.setHeader(req)
 
 	resp, err := t.client.Do(req)
 
@@ -99,6 +96,10 @@ func (t *Task) getToken() error {
 		RefreshToken: respData.RefreshToken,
 		AccessToken:  fmt.Sprintf("Bearer %s", respData.AccessToken),
 		ExpiredAt:    respData.ExpiresIn / 1e3,
+		Ua:           t.config.Ua,
+		UserId:       t.config.UserId,
+		PpOs:         t.config.PpOs,
+		PpStoreId:    t.config.PpStoreId,
 	}
 
 	if err := conf.Update(t.config); err != nil {
@@ -112,13 +113,12 @@ func (t *Task) getToken() error {
 
 func (t *Task) signTask() error {
 	reqUrl := "https://j1.pupuapi.com/client/game/sign?city_zip=350100&challenge="
+
 	req, _ := http.NewRequest(http.MethodPost, reqUrl, nil)
+
 	req.Header.Set("Authorization", t.config.AccessToken)
-	req.Header.Set("User-Agent", "Pupumall/2.7.0;iOS 15.0;245D5D8A-3860-490A-BD61-9B3E10221D4E")
 	req.Header.Set("content-type", "application/json; charset=utf-8")
-	req.Header.Add("pp-userid", "a32193f0-de63-4182-a1d3-8919cb92fc6f")
-	req.Header.Add("pp-os", "20")
-	req.Header.Add("pp-storeid", "fa701852-eb6e-405e-9321-aa2a12d0fb09")
+	t.setHeader(req)
 
 	resp, err := t.client.Do(req)
 
@@ -151,11 +151,8 @@ func (t *Task) shareTask() error {
 
 	req, _ := http.NewRequest(http.MethodPost, reqUrl, nil)
 	req.Header.Set("Authorization", t.config.AccessToken)
-	req.Header.Set("User-Agent", "Pupumall/2.7.0;iOS 15.0;245D5D8A-3860-490A-BD61-9B3E10221D4E")
 	req.Header.Set("content-type", "application/json; charset=utf-8")
-	req.Header.Add("pp-userid", "a32193f0-de63-4182-a1d3-8919cb92fc6f")
-	req.Header.Add("pp-os", "20")
-	req.Header.Add("pp-storeid", "fa701852-eb6e-405e-9321-aa2a12d0fb09")
+	t.setHeader(req)
 
 	resp, err := t.client.Do(req)
 	if err != nil {
@@ -182,10 +179,7 @@ func (t *Task) queryPointTask() error {
 
 	req, _ := http.NewRequest(http.MethodGet, reqUrl, nil)
 	req.Header.Set("Authorization", t.config.AccessToken)
-	req.Header.Set("User-Agent", "Pupumall/2.7.0;iOS 15.0;245D5D8A-3860-490A-BD61-9B3E10221D4E")
-	req.Header.Add("pp-userid", "a32193f0-de63-4182-a1d3-8919cb92fc6f")
-	req.Header.Add("pp-os", "20")
-	req.Header.Add("pp-storeid", "fa701852-eb6e-405e-9321-aa2a12d0fb09")
+	t.setHeader(req)
 
 	resp, err := t.client.Do(req)
 	if err != nil {
@@ -207,6 +201,21 @@ func (t *Task) queryPointTask() error {
 	t.result = append(t.result, fmt.Sprintf("【查询积分任务】：朴分%d，即将过期朴分%d，过期时间%s", respData.Balance, respData.ExpiringCoin, time.Unix(respData.ExpireTime/1000, 0).Format("2006-01-02 15:04:05")))
 
 	return nil
+}
+
+func (t *Task) setHeader(req *http.Request) {
+	if t.config.Ua != "" {
+		req.Header.Set("User-Agent", t.config.Ua)
+	}
+	if t.config.UserId != "" {
+		req.Header.Set("pp-userid", t.config.UserId)
+	}
+	if t.config.PpOs != "" {
+		req.Header.Set("pp-os", t.config.PpOs)
+	}
+	if t.config.PpStoreId != "" {
+		req.Header.Set("pp-storeid", t.config.PpStoreId)
+	}
 }
 
 func (t *Task) GetResult() string {

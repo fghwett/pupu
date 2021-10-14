@@ -19,6 +19,10 @@ type Config struct {
 	RefreshToken string `yaml:"refreshToken"`
 	AccessToken  string `yaml:"accessToken"`
 	ExpiredAt    int64  `yaml:"expiredAt"`
+	Ua           string `yaml:"ua"`
+	UserId       string `yaml:"userid"`
+	PpOs         string `yaml:"ppos"`
+	PpStoreId    string `yaml:"ppstoreid"`
 }
 
 type ServerChan struct {

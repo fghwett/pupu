@@ -1,5 +1,9 @@
 config:
   refreshToken:
+  ua:
+  userid:
+  ppos:
+  ppstoreid:
 
 serverChan:
   secretKey: ""
