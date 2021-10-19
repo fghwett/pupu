@@ -169,7 +169,7 @@ func (t *Task) shareTask() error {
 		return fmt.Errorf(response.ErrMsg)
 	}
 
-	t.result = append(t.result, fmt.Sprintf("【分享任务】：完成 获取%f积分", response.Data.(float64)))
+	t.result = append(t.result, fmt.Sprintf("【分享任务】：完成 获取%.f积分", response.Data.(float64)))
 
 	return nil
 }
