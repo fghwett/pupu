@@ -1,10 +1,13 @@
 # pupu
-朴朴超市 签到领积分
+朴朴超市 签到领积分（失效）
 
 ## 简介
 项目 [https://github.com/Churroser/PupuTool](https://github.com/Churroser/PupuTool) go语言版本
 
 电脑上没有C#环境，故编写本版本
+
+## 日志
+2021-10-22 签到改版（尚未适配）
 
 ## 申明
 - 本项目仅用于学习研究，禁止任何人用于商业用途，本人不保证其合法性，准确性，完整性和有效性
