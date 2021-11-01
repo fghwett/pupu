@@ -3,13 +3,13 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
-	"os"
-	"runtime"
-
 	"github.com/fghwett/pupu/config"
 	"github.com/fghwett/pupu/notify"
 	"github.com/fghwett/pupu/task"
+	"github.com/fghwett/pupu/util"
+	"log"
+	"os"
+	"runtime"
 )
 
 var path = flag.String("path", "./config.yml", "配置文件地址")
@@ -30,6 +30,8 @@ func main() {
 		fmt.Printf("读取配置文件失败 err: %s", err)
 		os.Exit(-1)
 	}
+
+	util.BigSleep(5, 20)
 
 	t = task.New(conf)
 	WithRecover(func() {
