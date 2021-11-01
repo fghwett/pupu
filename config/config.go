@@ -11,6 +11,7 @@ import (
 
 type Conf struct {
 	path       string
+	Name       string      `yaml:"name"`
 	Config     *Config     `yaml:"config"`
 	ServerChan *ServerChan `yaml:"serverChan"`
 }

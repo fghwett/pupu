@@ -25,7 +25,7 @@ func New(c *config.Conf) *Task {
 	return &Task{
 		config: c.Config,
 		client: &http.Client{},
-		result: []string{"==== 朴朴超市任务 ===="},
+		result: []string{fmt.Sprintf("==== %s ====", conf.Name)},
 	}
 }
 
@@ -133,7 +133,7 @@ func (t *Task) signTask() error {
 	}
 
 	signInResp := response.Data.(*SignInResponse)
-	result := fmt.Sprintf("【签到任务】：签到成功 本周第%d天签到 获得%d积分 %s", signInResp.TodaySignOrder, signInResp.DailySignRewardCoin, signInResp.RewardExplanation)
+	result := fmt.Sprintf("【签到任务】：签到成功 本周第%d天签到 获得%d积分 %s \n", signInResp.TodaySignOrder, signInResp.DailySignRewardCoin, signInResp.RewardExplanation)
 	result += fmt.Sprintf("【可以扭蛋】：%v", signInResp.IsShowTwistedEgg)
 
 	//if signInResp.RewardCouponList != nil && len(signInResp.RewardCouponList) > 0 {
