@@ -41,13 +41,13 @@ func (t *Task) Do() {
 		t.result = append(t.result, fmt.Sprintf("【签到任务】：失败 %s", err))
 		return
 	}
-
-	util.SmallSleep(1000, 3000)
-
-	if err := t.shareTask(); err != nil {
-		t.result = append(t.result, fmt.Sprintf("【分享任务】：失败 %s", err))
-		return
-	}
+	//
+	//util.SmallSleep(1000, 3000)
+	//
+	//if err := t.shareTask(); err != nil {
+	//	t.result = append(t.result, fmt.Sprintf("【分享任务】：失败 %s", err))
+	//	return
+	//}
 
 	util.SmallSleep(800, 2000)
 
@@ -112,9 +112,9 @@ func (t *Task) getToken() error {
 }
 
 func (t *Task) signTask() error {
-	reqUrl := "https://j1.pupuapi.com/client/game/sign?city_zip=350100&challenge="
+	reqUrl := "https://j1.pupuapi.com/client/game/sign/v2/index?city_zip=350200"
 
-	req, _ := http.NewRequest(http.MethodPost, reqUrl, nil)
+	req, _ := http.NewRequest(http.MethodGet, reqUrl, nil)
 
 	req.Header.Set("Authorization", t.config.AccessToken)
 	req.Header.Set("content-type", "application/json; charset=utf-8")
@@ -133,13 +133,14 @@ func (t *Task) signTask() error {
 	}
 
 	signInResp := response.Data.(*SignInResponse)
-	result := fmt.Sprintf("【签到任务】：签到成功 获得%d积分", signInResp.IncreasedScore)
+	result := fmt.Sprintf("【签到任务】：签到成功 本周第%d天签到 获得%d积分 %s", signInResp.TodaySignOrder, signInResp.DailySignRewardCoin, signInResp.RewardExplanation)
+	result += fmt.Sprintf("【可以扭蛋】：%v", signInResp.IsShowTwistedEgg)
 
-	if signInResp.RewardCouponList != nil && len(signInResp.RewardCouponList) > 0 {
-		for _, x := range signInResp.RewardCouponList {
-			result += fmt.Sprintf(" 获得满%.2f减%.2f优惠券", x.ConditionAmount/100, x.DiscountAmount/100)
-		}
-	}
+	//if signInResp.RewardCouponList != nil && len(signInResp.RewardCouponList) > 0 {
+	//	for _, x := range signInResp.RewardCouponList {
+	//		result += fmt.Sprintf(" 获得满%.2f减%.2f优惠券", x.ConditionAmount/100, x.DiscountAmount/100)
+	//	}
+	//}
 
 	t.result = append(t.result, result)
 
