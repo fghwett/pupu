@@ -112,12 +112,14 @@ func (t *Task) getToken() error {
 }
 
 func (t *Task) signTask() error {
-	reqUrl := "https://j1.pupuapi.com/client/game/sign/v2/index?city_zip=350200"
+	reqUrl := "https://j1.pupuapi.com/client/game/sign/v2?city_zip=350200&supplement_id="
 
-	req, _ := http.NewRequest(http.MethodGet, reqUrl, nil)
+	req, _ := http.NewRequest(http.MethodPost, reqUrl, nil)
 
 	req.Header.Set("Authorization", t.config.AccessToken)
 	req.Header.Set("content-type", "application/json; charset=utf-8")
+	req.Header.Set("Origin", "https://ma.pupumall.com")
+	req.Header.Set("Referer", "https://ma.pupumall.com/")
 	t.setHeader(req)
 
 	resp, err := t.client.Do(req)
@@ -133,8 +135,7 @@ func (t *Task) signTask() error {
 	}
 
 	signInResp := response.Data.(*SignInResponse)
-	result := fmt.Sprintf("【签到任务】：签到成功 本周第%d天签到 获得%d积分 %s \n", signInResp.TodaySignOrder, signInResp.DailySignRewardCoin, signInResp.RewardExplanation)
-	result += fmt.Sprintf("【可以扭蛋】：%v", signInResp.IsShowTwistedEgg)
+	result := fmt.Sprintf("【签到任务】：签到成功 获得%d积分 %s \n", signInResp.DailySignCoin, signInResp.RewardExplanation)
 
 	//if signInResp.RewardCouponList != nil && len(signInResp.RewardCouponList) > 0 {
 	//	for _, x := range signInResp.RewardCouponList {

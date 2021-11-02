@@ -12,7 +12,10 @@ import (
 	"runtime"
 )
 
-var path = flag.String("path", "./config.yml", "配置文件地址")
+var (
+	path    = flag.String("path", "./config.yml", "配置文件地址")
+	quickly = flag.Bool("quickly", false, "是否快速完成")
+)
 
 var (
 	conf *config.Conf
@@ -31,7 +34,9 @@ func main() {
 		os.Exit(-1)
 	}
 
-	util.BigSleep(5, 20)
+	if !*quickly {
+		util.BigSleep(5, 20)
+	}
 
 	t = task.New(conf)
 	WithRecover(func() {
