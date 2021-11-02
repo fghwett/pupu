@@ -1,5 +1,5 @@
 # pupu
-朴朴超市 签到领积分（失效）
+朴朴超市 签到领积分
 
 ## 简介
 项目 [https://github.com/Churroser/PupuTool](https://github.com/Churroser/PupuTool) go语言版本
