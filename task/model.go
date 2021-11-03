@@ -11,7 +11,11 @@ type Response struct {
 }
 
 type SignInResponse struct {
-	DailySignCoin        int    `json:"daily_sign_coin"`
+	DailySignCoin int `json:"daily_sign_coin"`
+	CouponList    []struct {
+		ConditionAmount float64 `json:"condition_amount"`
+		DiscountAmount  float64 `json:"discount_amount"`
+	} `json:"coupon_list"`
 	TeamRewardCoin       int    `json:"team_reward_coin"`
 	ShowCreateTeamButton bool   `json:"show_create_team_button"`
 	Title                string `json:"title"`

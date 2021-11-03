@@ -137,11 +137,11 @@ func (t *Task) signTask() error {
 	signInResp := response.Data.(*SignInResponse)
 	result := fmt.Sprintf("【签到任务】：签到成功 获得%d积分 %s \n", signInResp.DailySignCoin, signInResp.RewardExplanation)
 
-	//if signInResp.RewardCouponList != nil && len(signInResp.RewardCouponList) > 0 {
-	//	for _, x := range signInResp.RewardCouponList {
-	//		result += fmt.Sprintf(" 获得满%.2f减%.2f优惠券", x.ConditionAmount/100, x.DiscountAmount/100)
-	//	}
-	//}
+	if signInResp.CouponList != nil && len(signInResp.CouponList) > 0 {
+		for _, x := range signInResp.CouponList {
+			result += fmt.Sprintf(" 获得满%.2f减%.2f优惠券", x.ConditionAmount/100, x.DiscountAmount/100)
+		}
+	}
 
 	t.result = append(t.result, result)
 
