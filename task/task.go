@@ -30,17 +30,17 @@ func New(c *config.Conf) *Task {
 }
 
 func (t *Task) Do() {
-	if err := t.getToken(); err != nil {
-		t.result = append(t.result, fmt.Sprintf("【刷新登陆状态】：失败 %s", err))
-		return
-	}
-
-	util.SmallSleep(300, 800)
-
-	if err := t.signTask(); err != nil {
-		t.result = append(t.result, fmt.Sprintf("【签到任务】：失败 %s", err))
-		return
-	}
+	//if err := t.getToken(); err != nil {
+	//	t.result = append(t.result, fmt.Sprintf("【刷新登陆状态】：失败 %s", err))
+	//	return
+	//}
+	//
+	//util.SmallSleep(300, 800)
+	//
+	//if err := t.signTask(); err != nil {
+	//	t.result = append(t.result, fmt.Sprintf("【签到任务】：失败 %s", err))
+	//	return
+	//}
 	//
 	//util.SmallSleep(1000, 3000)
 	//
@@ -49,10 +49,17 @@ func (t *Task) Do() {
 	//	return
 	//}
 
+	//util.SmallSleep(800, 2000)
+	//
+	//if err := t.queryPointTask(); err != nil {
+	//	t.result = append(t.result, fmt.Sprintf("【查询积分任务】：失败 %s", err))
+	//	return
+	//}
+
 	util.SmallSleep(800, 2000)
 
-	if err := t.queryPointTask(); err != nil {
-		t.result = append(t.result, fmt.Sprintf("【查询积分任务】：失败 %s", err))
+	if err := t.queryDiscountTask(); err != nil {
+		t.result = append(t.result, fmt.Sprintf("【优惠券情况】：失败 %s", err))
 		return
 	}
 }
@@ -202,6 +209,43 @@ func (t *Task) queryPointTask() error {
 
 	t.result = append(t.result, fmt.Sprintf("【查询积分任务】：朴分%d，即将过期朴分%d，过期时间%s", respData.Balance, respData.ExpiringCoin, time.Unix(respData.ExpireTime/1000, 0).Format("2006-01-02 15:04:05")))
 
+	return nil
+}
+
+func (t *Task) queryDiscountTask() error {
+	reqUrl := "https://j1.pupuapi.com/client/account/discount/list?discount_type=-1&page=1&size=30&type=0"
+
+	req, _ := http.NewRequest(http.MethodGet, reqUrl, nil)
+	req.Header.Set("Host", "j1.pupuapi.com")
+	req.Header.Set("Authorization", t.config.AccessToken)
+	t.setHeader(req)
+
+	resp, err := t.client.Do(req)
+	if err != nil {
+		return err
+	}
+
+	response := &QueryDiscountResponse{}
+	err = util.GetHTTPResponse(resp, reqUrl, err, response)
+	if err != nil {
+		return err
+	}
+
+	if response.ErrCode != 0 {
+		return fmt.Errorf(response.ErrMsg)
+	}
+
+	respData := response.Data
+
+	if respData == nil || len(respData) == 0 {
+		t.result = append(t.result, "【优惠券情况】：您还没有优惠券")
+	} else {
+		str := "【优惠券情况】：如下 \n"
+		for k, discountInfo := range respData {
+			str += fmt.Sprintf("%d. %s %s \n", k+1, discountInfo.Rule.Name, discountInfo.Rule.ValidTimeRemark)
+		}
+		t.result = append(t.result, str)
+	}
 	return nil
 }
 

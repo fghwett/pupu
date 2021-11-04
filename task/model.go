@@ -59,3 +59,51 @@ type SignInPage struct {
 	UserNoviceGuidanceStatus int    `json:"user_novice_guidance_status"` // 用户新手指导状态
 	CoinGroupExplanation     string `json:"coin_group_explanation"`      // 组团积分规则
 }
+
+type QueryDiscountResponse struct {
+	ErrCode int         `json:"errcode"`
+	ErrMsg  string      `json:"errmsg"`
+	Data    []*Discount `json:"data"`
+}
+
+type Discount struct {
+	Rule              *DiscountRule `json:"rule"`
+	Id                string        `json:"id"`
+	Num               string        `json:"num"`
+	GetTime           int64         `json:"get_time"`
+	IsUsed            bool          `json:"is_used"`
+	DateStart         int64         `json:"date_start"`
+	DateEnd           int64         `json:"date_end"`
+	IsExpired         bool          `json:"is_expired"`
+	IsAvailable       bool          `json:"is_available"`
+	IsGlobalAvailable interface{}   `json:"is_global_available"`
+	IsExpiringSoon    bool          `json:"is_expiring_soon"`
+	PeriodOfValidity  string        `json:"period_of_validity"`
+	Reason            interface{}   `json:"reason"`
+	ReasonV2          interface{}   `json:"reason_v2"`
+	LimitProduct      interface{}   `json:"limit_product"`
+	ExtLimitProduct   interface{}   `json:"ext_limit_product"`
+	DifferenceAmount  float64       `json:"difference_amount"`
+}
+
+type DiscountRule struct {
+	DiscountId            string   `json:"discount_id"`
+	Name                  string   `json:"name"`
+	DiscountType          int      `json:"discount_type"`
+	ConditionAmount       int      `json:"condition_amount"`
+	DiscountAmount        int      `json:"discount_amount"`
+	Banner                string   `json:"banner"`
+	Content               string   `json:"content"`
+	LimitCategoriesStatus bool     `json:"limit_categories_status"`
+	LimitProduct          bool     `json:"limit_product"`
+	ExcludeSpecials       bool     `json:"exclude_specials"`
+	DiscountStatusType    int      `json:"discount_status_type"`
+	LimitAreaStatus       bool     `json:"limit_area_status"`
+	IsOrderCannotInvoice  bool     `json:"is_order_cannot_invoice"`
+	ConsumeRemark         []string `json:"consume_remark"`
+	ValidTimeRemark       string   `json:"valid_time_remark"`
+	GetType               int      `json:"get_type"`
+	AmountPrepaid         int      `json:"amount_prepaid"`
+	ConditionAmountDesc   string   `json:"condition_amount_desc"`
+	DiscountAmountDesc    string   `json:"discount_amount_desc"`
+}
